@@ -51,11 +51,3 @@
     <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
   </ul>
 </details>
-
-
-### :fireworks: Color Reference
-
-- **Primary:** ![#222831](https://img.shields.io/badge/Primary_Color-%23222831-222831?style=for-the-badge)
-- **Secondary:** ![#393E46](https://img.shields.io/badge/Secondary_Color-%23393E46-393E46?style=for-the-badge)
-- **Accent:** ![#00ADB5](https://img.shields.io/badge/Accent_Color-%2300ADB5-00ADB5?style=for-the-badge&logoColor=white)
-- **Text:** ![#EEEEEE](https://img.shields.io/badge/Text_Color-%23EEEEEE-EEEEEE?style=for-the-badge&labelColor=222831)
