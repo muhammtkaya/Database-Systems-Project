@@ -1,0 +1,32 @@
+# ===== Java / Maven =====
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# ===== Node / istemciler =====
+node_modules/
+dist/
+build/
+.vite/
+
+# ===== Ortam değişkenleri / secrets =====
+.env
+.env.local
+*.local
+
+# ===== IDE =====
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# ===== OS / Office geçici dosyaları =====
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
