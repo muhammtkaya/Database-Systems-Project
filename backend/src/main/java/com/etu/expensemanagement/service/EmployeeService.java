@@ -40,7 +40,8 @@ public class EmployeeService {
         Employee e = requireCurrentEmployee();
         String departmentName = e.getDepartmentNo() == null ? null
                 : departments.findById(e.getDepartmentNo()).map(d -> d.getName()).orElse(null);
-        boolean manager = employees.existsBySuperId(e.getEmployeeId());
+        // ADMIN = bir departmanin yoneticisi olmak (altinda eleman olmasi DEGIL).
+        boolean manager = !departments.findByManagerId(e.getEmployeeId()).isEmpty();
         return new EmployeeResponse(e.getEmployeeId(), e.getFirstName(), e.getLastName(),
                 e.getDepartmentNo(), departmentName, e.getSuperId(), e.getStartDate(), manager);
     }

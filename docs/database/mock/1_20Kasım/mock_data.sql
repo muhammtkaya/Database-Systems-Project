@@ -1,10 +1,12 @@
 -- 1. DEPARTMENT DATA (5 satır - 3 kademeli departman hiyerarşisi)
-INSERT INTO expense_management.department (department_no, name, manager_ssn, super_no) VALUES
-(1, 'Genel Müdürlük', '10000000001', NULL),
-(2, 'Bilgi Teknolojileri', '10000000002', 1),
-(3, 'Finans', '10000000003', 1),
-(4, 'Pazarlama', '10000000004', 1),
-(5, 'Yazılım Geliştirme', '10000000005', 2)
+-- manager_id, employee'ler henuz yok oldugu icin burada NULL birakilir;
+-- employee INSERT'inden SONRA UPDATE ile atanir (dongusel FK sirasi).
+INSERT INTO expense_management.department (department_no, name, super_no) VALUES
+(1, 'Genel Müdürlük', NULL),
+(2, 'Bilgi Teknolojileri', 1),
+(3, 'Finans', 1),
+(4, 'Pazarlama', 1),
+(5, 'Yazılım Geliştirme', 2)
 ON CONFLICT (department_no) DO NOTHING;
 
 -- 2. EMPLOYEE DATA (20 satır - 4 kademeli ağaç yapısı)
@@ -34,6 +36,13 @@ INSERT INTO expense_management.employee (employee_id, first_name, last_name, dep
 (119, 'Ceren', 'Yalçın', 4, 108, '2024-08-17'),
 (120, 'Onur', 'Kılıç', 4, 108, '2025-01-25')
 ON CONFLICT (employee_id) DO NOTHING;
+
+-- 2b. DEPARTMAN YONETICILERI (manager_id) - employee'ler olustuktan sonra atanir.
+-- Hiyerarsiye gore dogal esleme => ADMIN'ler: 101, 102, 103, 104, 105
+UPDATE expense_management.department AS d
+SET manager_id = m.mgr
+FROM (VALUES (1, 101), (2, 102), (3, 103), (4, 104), (5, 105)) AS m(dept, mgr)
+WHERE d.department_no = m.dept;
 
 -- 3. VENDOR DATA (20 satır)
 INSERT INTO expense_management.vendor (vendor_id, name) VALUES

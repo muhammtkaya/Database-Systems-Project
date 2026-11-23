@@ -33,6 +33,14 @@ public class Employee {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
+    /** Giris icin e-posta (tanimlayici). Auth akisi henuz kurulmadi; kolon hazir. */
+    @Column(name = "email", length = 100, unique = true)
+    private String email;
+
+    /** Sifrenin KENDISI degil, tek yonlu hash (BCrypt/Argon2id). Auth fazinda kullanilacak. */
+    @Column(name = "password_hash", length = 100)
+    private String passwordHash;
+
     protected Employee() {
         // required by JPA
     }
@@ -59,5 +67,13 @@ public class Employee {
 
     public LocalDate getStartDate() {
         return startDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
     }
 }
