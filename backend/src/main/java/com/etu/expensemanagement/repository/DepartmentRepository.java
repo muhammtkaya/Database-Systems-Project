@@ -1,12 +1,32 @@
 package com.etu.expensemanagement.repository;
 
-import com.etu.expensemanagement.entity.Department;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.etu.expensemanagement.model.Department;
+import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface DepartmentRepository extends JpaRepository<Department, Integer> {
+@Repository
+public class DepartmentRepository {
 
-    /** Bu employee'nin yonetici oldugu departmanlar. Bos ise employee ADMIN degildir. */
-    List<Department> findByManagerId(Integer managerId);
+    private final JdbcClient jdbc;
+
+    public DepartmentRepository(JdbcClient jdbc) {
+        this.jdbc = jdbc;
+    }
+
+    /** Used by: GET /api/employees/me (to show the department name). */
+    public Optional<Department> findById(int departmentNo) {
+        return jdbc.sql("""
+                        SELECT department_no, name, super_no
+                        FROM expense_management.department
+                        WHERE department_no = :no
+                        """)
+                .param("no", departmentNo)
+                .query((rs, rowNum) -> new Department(
+                        rs.getInt("department_no"),
+                        rs.getString("name"),
+                        rs.getObject("super_no", Integer.class)))
+                .optional();
+    }
 }

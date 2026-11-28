@@ -1,8 +1,9 @@
 package com.etu.expensemanagement.service;
 
 import com.etu.expensemanagement.dto.response.EmployeeResponse;
-import com.etu.expensemanagement.entity.Employee;
 import com.etu.expensemanagement.exception.UnauthorizedException;
+import com.etu.expensemanagement.model.Department;
+import com.etu.expensemanagement.model.Employee;
 import com.etu.expensemanagement.repository.DepartmentRepository;
 import com.etu.expensemanagement.repository.EmployeeRepository;
 import com.etu.expensemanagement.security.CurrentUser;
@@ -23,7 +24,8 @@ public class EmployeeService {
     }
 
     /**
-     * we verify here that such an employee really exists
+     * The employee behind the current request. The dev header only CLAIMS an id,
+     * so we verify here that such an employee really exists.
      */
     @Transactional(readOnly = true)
     public Employee requireCurrentEmployee() {
@@ -38,11 +40,10 @@ public class EmployeeService {
     @Transactional(readOnly = true)
     public EmployeeResponse getCurrentEmployee() {
         Employee e = requireCurrentEmployee();
-        String departmentName = e.getDepartmentNo() == null ? null
-                : departments.findById(e.getDepartmentNo()).map(d -> d.getName()).orElse(null);
-        // ADMIN = bir departmanin yoneticisi olmak (altinda eleman olmasi DEGIL).
-        boolean manager = !departments.findByManagerId(e.getEmployeeId()).isEmpty();
-        return new EmployeeResponse(e.getEmployeeId(), e.getFirstName(), e.getLastName(),
-                e.getDepartmentNo(), departmentName, e.getSuperId(), e.getStartDate(), manager);
+        String departmentName = e.departmentNo() == null ? null
+                : departments.findById(e.departmentNo()).map(Department::name).orElse(null);
+        boolean manager = employees.existsBySuperId(e.employeeId());
+        return new EmployeeResponse(e.employeeId(), e.firstName(), e.lastName(),
+                e.departmentNo(), departmentName, e.superId(), e.startDate(), manager);
     }
 }
