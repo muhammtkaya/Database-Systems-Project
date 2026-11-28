@@ -2,7 +2,6 @@ package com.etu.expensemanagement.service;
 
 import com.etu.expensemanagement.dto.response.VendorResponse;
 import com.etu.expensemanagement.repository.VendorRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +18,8 @@ public class VendorService {
 
     @Transactional(readOnly = true)
     public List<VendorResponse> listVendors() {
-        return vendors.findAll(Sort.by("name")).stream()
-                .map(v -> new VendorResponse(v.getVendorId(), v.getName()))
+        return vendors.findAllOrderByName().stream()
+                .map(v -> new VendorResponse(v.vendorId(), v.name()))
                 .toList();
     }
 }
